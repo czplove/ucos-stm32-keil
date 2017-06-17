@@ -22,7 +22,7 @@
 */
 
 #ifndef  OS_MASTER_FILE
-#define  OS_GLOBALS
+#define  OS_GLOBALS					//定义全程变量 OS_GLOBALS
 #include <ucos_ii.h>
 #endif
 
@@ -584,7 +584,7 @@ void  OSInit (void)
 #endif
 
 #if (OS_MEM_EN > 0u) && (OS_MAX_MEM_PART > 0u)
-    OS_MemInit();                                                /* Initialize the memory manager            */
+    OS_MemInit();                                                /* 对内存管理器进行初始化            */
 #endif
 
 #if (OS_Q_EN > 0u) && (OS_MAX_QS > 0u)

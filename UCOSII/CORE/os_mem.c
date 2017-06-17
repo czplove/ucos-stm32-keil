@@ -56,10 +56,10 @@
 *********************************************************************************************************
 */
 
-OS_MEM  *OSMemCreate (void   *addr,
-                      INT32U  nblks,
-                      INT32U  blksize,
-                      INT8U  *perr)
+OS_MEM  *OSMemCreate (void   *addr,			//-内存分区的起始地址
+                      INT32U  nblks,		//-分区内的内存块总块数
+                      INT32U  blksize,	//-每个内存块的字节数
+                      INT8U  *perr)			//-一个指向错误信息代码的指针
 {
     OS_MEM    *pmem;
     INT8U     *pblk;
@@ -127,7 +127,7 @@ OS_MEM  *OSMemCreate (void   *addr,
     pmem->OSMemNBlks    = nblks;
     pmem->OSMemBlkSize  = blksize;                    /* Store block size of each memory blocks        */
     *perr               = OS_ERR_NONE;
-    return (pmem);
+    return (pmem);		//-返回一个指向内存控制块的指针
 }
 /*$PAGE*/
 /*
@@ -149,8 +149,8 @@ OS_MEM  *OSMemCreate (void   *addr,
 *               A pointer to NULL if an error is detected
 *********************************************************************************************************
 */
-
-void  *OSMemGet (OS_MEM  *pmem,
+//-从已经建立的内存分区中申请一个内存块
+void  *OSMemGet (OS_MEM  *pmem,	//-指向特定内存分区的指针
                  INT8U   *perr)
 {
     void      *pblk;
@@ -173,13 +173,13 @@ void  *OSMemGet (OS_MEM  *pmem,
     }
 #endif
     OS_ENTER_CRITICAL();
-    if (pmem->OSMemNFree > 0u) {                      /* See if there are any free memory blocks       */
-        pblk                = pmem->OSMemFreeList;    /* Yes, point to next free memory block          */
-        pmem->OSMemFreeList = *(void **)pblk;         /*      Adjust pointer to new free list          */
-        pmem->OSMemNFree--;                           /*      One less memory block in this partition  */
+    if (pmem->OSMemNFree > 0u) {                      /* 检查内存分区中是否有空闲的内存块       */
+        pblk                = pmem->OSMemFreeList;    /* 从空闲内存块链表中删除第一个内存块          */
+        pmem->OSMemFreeList = *(void **)pblk;         /*      对空闲内存块链表作相应的修改          */
+        pmem->OSMemNFree--;                           /*      空闲内存块数减1  */
         OS_EXIT_CRITICAL();
         *perr = OS_ERR_NONE;                          /*      No error                                 */
-        return (pblk);                                /*      Return memory block to caller            */
+        return (pblk);                                /*      返回指向被分配内存块的指针            */
     }
     OS_EXIT_CRITICAL();
     *perr = OS_ERR_MEM_NO_FREE_BLKS;                  /* No,  Notify caller of empty memory partition  */
@@ -327,8 +327,8 @@ void  OSMemNameSet (OS_MEM  *pmem,
 *               OS_ERR_MEM_INVALID_PBLK  if you passed a NULL pointer for the block to release.
 *********************************************************************************************************
 */
-
-INT8U  OSMemPut (OS_MEM  *pmem,
+//-	释放一个内存块
+INT8U  OSMemPut (OS_MEM  *pmem,		//-指向内存控制块的指针
                  void    *pblk)
 {
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
@@ -346,13 +346,13 @@ INT8U  OSMemPut (OS_MEM  *pmem,
     }
 #endif
     OS_ENTER_CRITICAL();
-    if (pmem->OSMemNFree >= pmem->OSMemNBlks) {  /* Make sure all blocks not already returned          */
-        OS_EXIT_CRITICAL();
+    if (pmem->OSMemNFree >= pmem->OSMemNBlks) {  /* 检查内存分区是否已满          */
+        OS_EXIT_CRITICAL();		//-说明系统在分配和释放内存时出现了错误
         return (OS_ERR_MEM_FULL);
     }
-    *(void **)pblk      = pmem->OSMemFreeList;   /* Insert released block into free block list         */
+    *(void **)pblk      = pmem->OSMemFreeList;   /* 要释放的内存块被插入到该分区的空闲内存块链表中         */
     pmem->OSMemFreeList = pblk;
-    pmem->OSMemNFree++;                          /* One more memory block in this partition            */
+    pmem->OSMemNFree++;                          /* 将分区中空闲内存块总数加1            */
     OS_EXIT_CRITICAL();
     return (OS_ERR_NONE);                        /* Notify caller that memory block was released       */
 }
@@ -374,7 +374,7 @@ INT8U  OSMemPut (OS_MEM  *pmem,
 *               OS_ERR_MEM_INVALID_PDATA  if you passed a NULL pointer to the data recipient.
 *********************************************************************************************************
 */
-
+//-	查询一个内存分区的状态
 #if OS_MEM_QUERY_EN > 0u
 INT8U  OSMemQuery (OS_MEM       *pmem,
                    OS_MEM_DATA  *p_mem_data)
@@ -393,7 +393,7 @@ INT8U  OSMemQuery (OS_MEM       *pmem,
         return (OS_ERR_MEM_INVALID_PDATA);
     }
 #endif
-    OS_ENTER_CRITICAL();
+    OS_ENTER_CRITICAL();		//-代码首先禁止了外部中断，防止复制过程中某些变量值被修改
     p_mem_data->OSAddr     = pmem->OSMemAddr;
     p_mem_data->OSFreeList = pmem->OSMemFreeList;
     p_mem_data->OSBlkSize  = pmem->OSMemBlkSize;

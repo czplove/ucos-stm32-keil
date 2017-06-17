@@ -6,7 +6,7 @@
 *                              (c) Copyright 1992-2009, Micrium, Weston, FL
 *                                           All Rights Reserved
 *
-* File    : uCOS_II.H
+* File    : uCOS_II.H			ucos内部函数参数设定
 * By      : Jean J. Labrosse
 * Version : V2.91
 *
@@ -33,7 +33,7 @@ extern "C" {
 *********************************************************************************************************
 */
 
-#define  OS_VERSION                 291u                /* Version of uC/OS-II (Vx.yy mult. by 100)    */
+#define  OS_VERSION                 291u                // 定义uC/OS-II版本号
 
 /*
 *********************************************************************************************************
@@ -432,24 +432,24 @@ typedef struct os_mbox_data {
 
 #if (OS_MEM_EN > 0u) && (OS_MAX_MEM_PART > 0u)
 typedef struct os_mem {                   /* MEMORY CONTROL BLOCK                                      */
-    void   *OSMemAddr;                    /* Pointer to beginning of memory partition                  */
-    void   *OSMemFreeList;                /* Pointer to list of free memory blocks                     */
-    INT32U  OSMemBlkSize;                 /* Size (in bytes) of each block of memory                   */
-    INT32U  OSMemNBlks;                   /* Total number of blocks in this partition                  */
-    INT32U  OSMemNFree;                   /* Number of memory blocks remaining in this partition       */
+    void   *OSMemAddr;                    /* 指向内存分区起始地址的指针                  */
+    void   *OSMemFreeList;                /* 指向下一个空闲内存控制块或者下一个空闲的内存块的指针                     */
+    INT32U  OSMemBlkSize;                 /* 内存分区中内存块的大小                   */
+    INT32U  OSMemNBlks;                   /* 内存分区中总的内存块数量                  */
+    INT32U  OSMemNFree;                   /* 内存分区中当前可以得空闲内存块数量       */
 #if OS_MEM_NAME_EN > 0u
     INT8U  *OSMemName;                    /* Memory partition name                                     */
 #endif
-} OS_MEM;
+} OS_MEM;		//-内存控制块的数据结构
 
 
 typedef struct os_mem_data {
-    void   *OSAddr;                    /* Pointer to the beginning address of the memory partition     */
-    void   *OSFreeList;                /* Pointer to the beginning of the free list of memory blocks   */
-    INT32U  OSBlkSize;                 /* Size (in bytes) of each memory block                         */
-    INT32U  OSNBlks;                   /* Total number of blocks in the partition                      */
-    INT32U  OSNFree;                   /* Number of memory blocks free                                 */
-    INT32U  OSNUsed;                   /* Number of memory blocks used                                 */
+    void   *OSAddr;                    /* 指向内存分区首地址的指针     */
+    void   *OSFreeList;                /* 指向空闲内存块链表首地址的指针   */
+    INT32U  OSBlkSize;                 /* 每个内存块所含的字节数                         */
+    INT32U  OSNBlks;                   /* 内存分区总的内存块数                      */
+    INT32U  OSNFree;                   /* 空闲内存块总数                                 */
+    INT32U  OSNUsed;                   /* 正在使用的内存块总数                                 */
 } OS_MEM_DATA;
 #endif
 
