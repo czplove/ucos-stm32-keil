@@ -591,7 +591,7 @@ void  OSInit (void)
     OS_QInit();                                                  /* Initialize the message queue structures  */
 #endif
 
-    OS_InitTaskIdle();                                           /* Create the Idle Task                     */
+    OS_InitTaskIdle();                                           /* 创建空闲任务                     */
 #if OS_TASK_STAT_EN > 0u
     OS_InitTaskStat();                                           /* Create the Statistic Task                */
 #endif
@@ -973,7 +973,7 @@ void  OSTimeTick (void)
 *********************************************************************************************************
 */
 
-INT16U  OSVersion (void)
+INT16U  OSVersion (void)		//-获取当前μC/OS-Ⅱ的版本号
 {
     return (OS_VERSION);
 }
