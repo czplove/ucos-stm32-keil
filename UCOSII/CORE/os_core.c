@@ -1328,7 +1328,7 @@ static  void  OS_InitEventList (void)
 static  void  OS_InitMisc (void)
 {
 #if OS_TIME_GET_SET_EN > 0u
-    OSTime                    = 0uL;                       /* Clear the 32-bit system clock            */
+    OSTime                    = 0uL;                       /* 32位的系统节拍计数器初始化            */
 #endif
 
     OSIntNesting              = 0u;                        /* Clear the interrupt nesting counter      */

@@ -41,7 +41,7 @@
 *********************************************************************************************************
 */
 
-void  OSTimeDly (INT32U ticks)
+void  OSTimeDly (INT32U ticks)		//-任务延时函数
 {
     INT8U      y;
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
@@ -56,7 +56,7 @@ void  OSTimeDly (INT32U ticks)
     if (OSLockNesting > 0u) {                    /* See if called with scheduler locked                */
         return;
     }
-    if (ticks > 0u) {                            /* 0 means no delay!                                  */
+    if (ticks > 0u) {                            /* 如果用户指定0值,则表明用户不想延时任务，函数会立即返回到调用者                                  */
         OS_ENTER_CRITICAL();
         y            =  OSTCBCur->OSTCBY;        /* Delay current task                                 */
         OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
@@ -65,7 +65,7 @@ void  OSTimeDly (INT32U ticks)
         }
         OSTCBCur->OSTCBDly = ticks;              /* Load ticks in TCB                                  */
         OS_EXIT_CRITICAL();
-        OS_Sched();                              /* Find next task to run!                             */
+        OS_Sched();                              /* 进行一次任务调度                             */
     }
 }
 /*$PAGE*/
@@ -121,7 +121,7 @@ INT8U  OSTimeDlyHMSM (INT8U   hours,
         }
     }
     if (minutes > 59u) {
-        return (OS_ERR_TIME_INVALID_MINUTES);    /* Validate arguments to be within range              */
+        return (OS_ERR_TIME_INVALID_MINUTES);    /* 检验用户是否为参数定义了有效的值              */
     }
     if (seconds > 59u) {
         return (OS_ERR_TIME_INVALID_SECONDS);
@@ -159,7 +159,7 @@ INT8U  OSTimeDlyHMSM (INT8U   hours,
 */
 
 #if OS_TIME_DLY_RESUME_EN > 0u
-INT8U  OSTimeDlyResume (INT8U prio)
+INT8U  OSTimeDlyResume (INT8U prio)	//-让处在延时期的任务结束延时
 {
     OS_TCB    *ptcb;
 #if OS_CRITICAL_METHOD == 3u                                   /* Storage for CPU status register      */
@@ -168,11 +168,11 @@ INT8U  OSTimeDlyResume (INT8U prio)
 
 
 
-    if (prio >= OS_LOWEST_PRIO) {
+    if (prio >= OS_LOWEST_PRIO) {															//-检测指定的任务优先级是否有效 
         return (OS_ERR_PRIO_INVALID);
     }
     OS_ENTER_CRITICAL();
-    ptcb = OSTCBPrioTbl[prio];                                 /* Make sure that task exist            */
+    ptcb = OSTCBPrioTbl[prio];                                 /* 判断要结束延时的任务是否确实存在            */
     if (ptcb == (OS_TCB *)0) {
         OS_EXIT_CRITICAL();
         return (OS_ERR_TASK_NOT_EXIST);                        /* The task does not exist              */
@@ -181,12 +181,12 @@ INT8U  OSTimeDlyResume (INT8U prio)
         OS_EXIT_CRITICAL();
         return (OS_ERR_TASK_NOT_EXIST);                        /* The task does not exist              */
     }
-    if (ptcb->OSTCBDly == 0u) {                                /* See if task is delayed               */
+    if (ptcb->OSTCBDly == 0u) {                                /* 检验任务是否在等待延时期满              */
         OS_EXIT_CRITICAL();
         return (OS_ERR_TIME_NOT_DLY);                          /* Indicate that task was not delayed   */
     }
 
-    ptcb->OSTCBDly = 0u;                                       /* Clear the time delay                 */
+    ptcb->OSTCBDly = 0u;                                       /* 延时就可以通过强制命令OSTCBDly为0来取消                 */
     if ((ptcb->OSTCBStat & OS_STAT_PEND_ANY) != OS_STAT_RDY) {
         ptcb->OSTCBStat     &= ~OS_STAT_PEND_ANY;              /* Yes, Clear status flag               */
         ptcb->OSTCBStatPend  =  OS_STAT_PEND_TO;               /* Indicate PEND timeout                */
@@ -194,10 +194,10 @@ INT8U  OSTimeDlyResume (INT8U prio)
         ptcb->OSTCBStatPend  =  OS_STAT_PEND_OK;
     }
     if ((ptcb->OSTCBStat & OS_STAT_SUSPEND) == OS_STAT_RDY) {  /* Is task suspended?                   */
-        OSRdyGrp               |= ptcb->OSTCBBitY;             /* No,  Make ready                      */
+        OSRdyGrp               |= ptcb->OSTCBBitY;             /* No,  任务就会被放在就绪表中                      */
         OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
         OS_EXIT_CRITICAL();
-        OS_Sched();                                            /* See if this is new highest priority  */
+        OS_Sched();                                            /* 调用任务调度程序来看被恢复的任务是否拥有比当前任务更高的优先级，这会导致任务的切换。  */
     } else {
         OS_EXIT_CRITICAL();                                    /* Task may be suspended                */
     }
@@ -219,7 +219,7 @@ INT8U  OSTimeDlyResume (INT8U prio)
 */
 
 #if OS_TIME_GET_SET_EN > 0u
-INT32U  OSTimeGet (void)
+INT32U  OSTimeGet (void)		//-得到系统时间
 {
     INT32U     ticks;
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
@@ -248,7 +248,7 @@ INT32U  OSTimeGet (void)
 */
 
 #if OS_TIME_GET_SET_EN > 0u
-void  OSTimeSet (INT32U ticks)
+void  OSTimeSet (INT32U ticks)		//-改变系统时间
 {
 #if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
     OS_CPU_SR  cpu_sr = 0u;
