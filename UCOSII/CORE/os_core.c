@@ -566,7 +566,7 @@ INT16U  OSEventPendMulti (OS_EVENT  **pevents_pend,
 * Returns    : none
 *********************************************************************************************************
 */
-
+//-会创建两个任务。
 void  OSInit (void)
 {
     OSInitHookBegin();                                           /* Call port specific initialization code   */
@@ -868,7 +868,7 @@ void  OSStatInit (void)
     OSTimeDly(OS_TICKS_PER_SEC / 10u);           /* Determine MAX. idle counter value for 1/10 second  */
     OS_ENTER_CRITICAL();
     OSIdleCtrMax = OSIdleCtr;                    /* Store maximum idle counter count in 1/10 second    */
-    OSStatRdy    = OS_TRUE;
+    OSStatRdy    = OS_TRUE;												//-准备就绪了统计任务,可以开始实时统计了
     OS_EXIT_CRITICAL();
 }
 #endif
@@ -1758,12 +1758,12 @@ void  OS_TaskIdle (void *p_arg)
 
 
 
-    p_arg = p_arg;                               /* Prevent compiler warning for not using 'p_arg'     */
-    for (;;) {
-        OS_ENTER_CRITICAL();
-        OSIdleCtr++;
-        OS_EXIT_CRITICAL();
-        OSTaskIdleHook();                        /* Call user definable HOOK                           */
+    p_arg = p_arg;                               /* 防止编译器报错，没有用到P_ARG变量     */
+    for (;;) {																		//-任务都是一个死循环
+        OS_ENTER_CRITICAL();											//关闭中断
+        OSIdleCtr++;															//每运行一次都会记录下
+        OS_EXIT_CRITICAL();												//开放中断
+        OSTaskIdleHook();                        /* 每运行一次空闲任务调用的勾函数                           */
     }
 }
 /*$PAGE*/
@@ -1790,7 +1790,7 @@ void  OS_TaskIdle (void *p_arg)
 *                 maximum value for the idle counter.
 *********************************************************************************************************
 */
-
+//-统计函数每秒计算一次处理器单位时间内的被任务占用时间,可以通过 OS_TASK_STAT_EN 置一来打开。
 #if OS_TASK_STAT_EN > 0u
 void  OS_TaskStat (void *p_arg)
 {
@@ -1802,30 +1802,30 @@ void  OS_TaskStat (void *p_arg)
 
     p_arg = p_arg;                               /* Prevent compiler warning for not using 'p_arg'     */
     while (OSStatRdy == OS_FALSE) {
-        OSTimeDly(2u * OS_TICKS_PER_SEC / 10u);  /* Wait until statistic task is ready                 */
+        OSTimeDly(2u * OS_TICKS_PER_SEC / 10u);  /* 直到操作系统就绪才允许运行统计任务                 */
     }
-    OSIdleCtrMax /= 100uL;
+    OSIdleCtrMax /= 100uL;		//-OSIdleCtrMax空闲任务0.1s内运行次数的最大值
     if (OSIdleCtrMax == 0uL) {
-        OSCPUUsage = 0u;
-#if OS_TASK_SUSPEND_EN > 0u
-        (void)OSTaskSuspend(OS_PRIO_SELF);
+        OSCPUUsage = 0u;			//-如果这个最大值小于100统计错了，清零。
+#if OS_TASK_SUSPEND_EN > 0u		//-如果启用挂起任务函数
+        (void)OSTaskSuspend(OS_PRIO_SELF);		//-把当前的统计任务挂起（退出统计任务）
 #else
-        for (;;) {
-            OSTimeDly(OS_TICKS_PER_SEC);
+        for (;;) {														//-如果没有启用
+            OSTimeDly(OS_TICKS_PER_SEC);			//-利用 OSTimeDly进行任务调度（退出统计任务）
         }
 #endif
     }
     for (;;) {
         OS_ENTER_CRITICAL();
-        OSIdleCtrRun = OSIdleCtr;                /* Obtain the of the idle counter for the past second */
-        OSIdleCtr    = 0uL;                      /* Reset the idle counter for the next second         */
+        OSIdleCtrRun = OSIdleCtr;                /* 获取上一秒内空闲任务的运行次数 */
+        OSIdleCtr    = 0uL;                      /* 同时清空空闲任务计数器为下一次统计做准备         */
         OS_EXIT_CRITICAL();
         OSCPUUsage   = (INT8U)(100uL - OSIdleCtrRun / OSIdleCtrMax);
-        OSTaskStatHook();                        /* Invoke user definable hook                         */
+        OSTaskStatHook();                        /* 调用勾函数                         */
 #if (OS_TASK_STAT_STK_CHK_EN > 0u) && (OS_TASK_CREATE_EXT_EN > 0u)
-        OS_TaskStatStkChk();                     /* Check the stacks for each task                     */
+        OS_TaskStatStkChk();                     /* 检查每个任务的堆栈                     */
 #endif
-        OSTimeDly(OS_TICKS_PER_SEC / 10u);       /* Accumulate OSIdleCtr for the next 1/10 second      */
+        OSTimeDly(OS_TICKS_PER_SEC / 10u);       /* 积累下一次0.1秒的空闲任务运行值      */
     }
 }
 #endif

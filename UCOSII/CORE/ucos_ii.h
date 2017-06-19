@@ -654,7 +654,7 @@ OS_EXT  OS_FLAG_GRP      *OSFlagFreeList;           /* Pointer to free list of e
 #endif
 
 #if OS_TASK_STAT_EN > 0u
-OS_EXT  INT8U             OSCPUUsage;               /* Percentage of CPU used                          */
+OS_EXT  INT8U             OSCPUUsage;               /* cpu占用率/每秒                         */
 OS_EXT  INT32U            OSIdleCtrMax;             /* Max. value that idle ctr can take in 1 sec.     */
 OS_EXT  INT32U            OSIdleCtrRun;             /* Val. reached by idle ctr at run time in 1 sec.  */
 OS_EXT  BOOLEAN           OSStatRdy;                /* Flag indicating that the statistic task is rdy  */
@@ -673,7 +673,7 @@ OS_EXT  OS_PRIO           OSRdyTbl[OS_RDY_TBL_SIZE];       /* Table of tasks whi
 
 OS_EXT  BOOLEAN           OSRunning;                       /* Flag indicating that kernel is running   */
 
-OS_EXT  INT8U             OSTaskCtr;                       /* Number of tasks created                  */
+OS_EXT  INT8U             OSTaskCtr;                       /* 总共创建成功的任务数目                  */
 
 OS_EXT  volatile  INT32U  OSIdleCtr;                                 /* Idle counter                   */
 

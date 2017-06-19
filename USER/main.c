@@ -65,12 +65,12 @@ int main(void)
 	OSStart(); 				//开始多任务调度
 }
 
-//开始任务
+//开始任务,是第一个被执行的应用任务
 void start_task(void *pdata)
 {
 	OS_CPU_SR cpu_sr=0;
 	pdata=pdata;
-	OSStatInit();  //开启统计任务
+	OSStatInit();  //开启统计任务,在开始其他任务之前实现统计任务的初始化,下面就可以实现统计任务了
 	
 	OS_ENTER_CRITICAL();  //进入临界区(关闭中断)
 	OSTaskCreate(led0_task,(void*)0,(OS_STK*)&LED0_TASK_STK[LED0_STK_SIZE-1],LED0_TASK_PRIO);//创建LED0任务
