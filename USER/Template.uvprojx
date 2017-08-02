@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\FWLIB\STM32F4xx_StdPeriph_Driver\inc;..\USER;..\HARDWARE\LED;..\UCOSII\CONFIG;..\UCOSII\CORE;..\UCOSII\PORT</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\FWLIB\STM32F4xx_StdPeriph_Driver\inc;..\USER;..\HARDWARE\LED;..\UCOSII\CONFIG;..\UCOSII\CORE;..\UCOSII\PORT;..\Testapp;..\TIZA_LIB\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -472,6 +472,21 @@
               <FileName>stm32f4xx_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FWLIB\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWLIB\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWLIB\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_pwr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWLIB\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -582,6 +597,31 @@
               <FileName>os_cfg.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\UCOSII\CONFIG\os_cfg.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Test-task</GroupName>
+          <Files>
+            <File>
+              <FileName>GREENPower.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Testapp\GREENPower.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>TIZA_LIB</GroupName>
+          <Files>
+            <File>
+              <FileName>tiza_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TIZA_LIB\src\tiza_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>tiza_power.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TIZA_LIB\src\tiza_power.c</FilePath>
             </File>
           </Files>
         </Group>
