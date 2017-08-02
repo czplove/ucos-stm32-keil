@@ -1,17 +1,13 @@
-#include "led.h"
-#include "delay.h"
 #include "sys.h"
+#include "delay.h"
 #include "usart.h"
+#include "led.h"
 #include "includes.h"
-/************************************************
- ALIENTEK战舰STM32开发板UCOS实验
- UCOSII移植
- 技术支持：www.openedv.com
- 淘宝店铺：http://eboard.taobao.com 
- 关注微信公众平台微信号："正点原子"，免费获取STM32资料。
- 广州市星翼电子科技有限公司  
- 作者：正点原子 @ALIENTEK
-************************************************/
+
+//ALIENTEK 探索者STM32F407开发板 UCOS实验1
+//UCOSII 移植
+//技术支持：www.openedv.com
+//广州市星翼电子科技有限公司
 
 //START 任务
 //设置任务优先级
@@ -55,14 +51,14 @@ void float_task(void *pdata);
 
 int main(void)
 {
-	delay_init();       	//延时初始化
+	delay_init(168);       //延时初始化
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); //中断分组配置
-	uart_init(115200);    	//串口波特率设置
-	LED_Init();  			//LED初始化
+	uart_init(115200);    //串口波特率设置
+	LED_Init();  //LED初始化
 	
-	OSInit();  				//UCOS初始化
+	OSInit();  //UCOS初始化
 	OSTaskCreate(start_task,(void*)0,(OS_STK*)&START_TASK_STK[START_STK_SIZE-1],START_TASK_PRIO); //创建开始任务
-	OSStart(); 				//开始任务
+	OSStart(); //开始任务
 }
 
 //开始任务
@@ -89,7 +85,7 @@ void led0_task(void *pdata)
 		LED0=0; 
 		delay_ms(80);
 		LED0=1;
-		delay_ms(400);
+		delay_ms(100);
 	}
 }
 
@@ -114,7 +110,7 @@ void float_task(void *pdata)
 	{
 		float_num+=0.01f;
 		OS_ENTER_CRITICAL();	//进入临界区(关闭中断)
-		printf("float_num的值为: %.4f\r\n",float_num); //串口打印结果
+		printf("float_num的值为: %f\r\n",float_num); //串口打印结果
 		OS_EXIT_CRITICAL();		//退出临界区(开中断)
 		delay_ms(500);
 	}

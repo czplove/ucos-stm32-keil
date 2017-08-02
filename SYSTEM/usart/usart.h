@@ -1,6 +1,7 @@
 #ifndef __USART_H
 #define __USART_H
 #include "stdio.h"	
+#include "stm32f4xx_conf.h"
 #include "sys.h" 
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
