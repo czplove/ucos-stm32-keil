@@ -55,7 +55,7 @@ int main(void)
 {
 	delay_init(168);       //延时初始化
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); //中断分组配置
-	uart_init(115200);    //串口波特率设置
+//	uart_init(115200);    //串口波特率设置
 	LED_Init();  //LED初始化
 	
 	OSInit();  //UCOS初始化
@@ -90,7 +90,7 @@ void led0_task(void *pdata)
 //		delay_ms(80);
 //		LED0=1;
 //		delay_ms(100);
-		delay_ms(100);
+		delay_ms(1000);
 		test_callback();
 	}
 }

@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\FWLIB\STM32F4xx_StdPeriph_Driver\inc;..\USER;..\HARDWARE\LED;..\UCOSII\CONFIG;..\UCOSII\CORE;..\UCOSII\PORT;..\Testapp;..\TIZA_LIB\inc</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\FWLIB\STM32F4xx_StdPeriph_Driver\inc;..\USER;..\HARDWARE\LED;..\UCOSII\CONFIG;..\UCOSII\CORE;..\UCOSII\PORT;..\Testapp;..\TIZA_LIB\inc;..\UCOSII\EXT</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -608,6 +608,11 @@
               <FileType>1</FileType>
               <FilePath>..\Testapp\GREENPower.c</FilePath>
             </File>
+            <File>
+              <FileName>Debug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Testapp\Debug.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -622,6 +627,21 @@
               <FileName>tiza_power.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\TIZA_LIB\src\tiza_power.c</FilePath>
+            </File>
+            <File>
+              <FileName>tiza_debug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TIZA_LIB\src\tiza_debug.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>UCOSII-EXT</GroupName>
+          <Files>
+            <File>
+              <FileName>malloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UCOSII\EXT\malloc.c</FilePath>
             </File>
           </Files>
         </Group>
