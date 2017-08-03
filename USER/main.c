@@ -4,6 +4,7 @@
 #include "led.h"
 #include "includes.h"
 #include "GREENPower.h"
+#include "Debug.h"
 
 //ALIENTEK 探索者STM32F407开发板 UCOS实验1
 //UCOSII 移植
@@ -54,7 +55,7 @@ int main(void)
 {
 	delay_init(168);       //延时初始化
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); //中断分组配置
-//	uart_init(115200);    //串口波特率设置
+	uart_init(115200);    //串口波特率设置
 	LED_Init();  //LED初始化
 	
 	OSInit();  //UCOS初始化
@@ -70,10 +71,11 @@ void start_task(void *pdata)
 	OSStatInit();  //开启统计任务
 	
 	OS_ENTER_CRITICAL();  //进入临界区(关闭中断)
-//	OSTaskCreate(led0_task,(void*)0,(OS_STK*)&LED0_TASK_STK[LED0_STK_SIZE-1],LED0_TASK_PRIO);//创建LED0任务
+	OSTaskCreate(led0_task,(void*)0,(OS_STK*)&LED0_TASK_STK[LED0_STK_SIZE-1],LED0_TASK_PRIO);//创建LED0任务
 //	OSTaskCreate(led1_task,(void*)0,(OS_STK*)&LED1_TASK_STK[LED1_STK_SIZE-1],LED1_TASK_PRIO);//创建LED1任务
 //	OSTaskCreate(float_task,(void*)0,(OS_STK*)&FLOAT_TASK_STK[FLOAT_STK_SIZE-1],FLOAT_TASK_PRIO);//创建浮点测试任务
-	start_greenpower(7);
+//	start_greenpower(7);
+	start_debug(17);
 	OSTaskSuspend(START_TASK_PRIO);//挂起开始任务
 	OS_EXIT_CRITICAL();  //退出临界区(开中断)
 }
@@ -88,6 +90,8 @@ void led0_task(void *pdata)
 //		delay_ms(80);
 //		LED0=1;
 //		delay_ms(100);
+		delay_ms(100);
+		test_callback();
 	}
 }
 

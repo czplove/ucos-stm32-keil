@@ -40,10 +40,10 @@ void greenpower_task(void *pdata)
 //		delay_ms(100);
 		RtcSetAlarm(1);
 		CpuPowerDown();
-		i++;
-		if(i%2)
-			LED0=0; 
-		else
-			LED0=1; 
+//		i++;
+//		if(i%2)
+//			LED0=0; 
+//		else
+//			LED0=1; 
 	}
 }
