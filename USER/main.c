@@ -71,10 +71,11 @@ void start_task(void *pdata)
 	OSStatInit();  //开启统计任务
 	
 	OS_ENTER_CRITICAL();  //进入临界区(关闭中断)
-	OSTaskCreate(led0_task,(void*)0,(OS_STK*)&LED0_TASK_STK[LED0_STK_SIZE-1],LED0_TASK_PRIO);//创建LED0任务
+//	OSTaskCreate(led0_task,(void*)0,(OS_STK*)&LED0_TASK_STK[LED0_STK_SIZE-1],LED0_TASK_PRIO);//创建LED0任务
 //	OSTaskCreate(led1_task,(void*)0,(OS_STK*)&LED1_TASK_STK[LED1_STK_SIZE-1],LED1_TASK_PRIO);//创建LED1任务
 //	OSTaskCreate(float_task,(void*)0,(OS_STK*)&FLOAT_TASK_STK[FLOAT_STK_SIZE-1],FLOAT_TASK_PRIO);//创建浮点测试任务
 //	start_greenpower(7);
+	start_sdcard(15);
 	start_debug(17);
 	OSTaskSuspend(START_TASK_PRIO);//挂起开始任务
 	OS_EXIT_CRITICAL();  //退出临界区(开中断)

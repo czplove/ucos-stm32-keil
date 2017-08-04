@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\FWLIB\STM32F4xx_StdPeriph_Driver\inc;..\USER;..\HARDWARE\LED;..\UCOSII\CONFIG;..\UCOSII\CORE;..\UCOSII\PORT;..\Testapp;..\TIZA_LIB\inc;..\UCOSII\EXT</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\FWLIB\STM32F4xx_StdPeriph_Driver\inc;..\USER;..\HARDWARE\LED;..\UCOSII\CONFIG;..\UCOSII\CORE;..\UCOSII\PORT;..\Testapp;..\TIZA_LIB\inc;..\UCOSII\EXT;..\FATFS\exfuns;..\FATFS\src;..\HARDWARE\SDIO</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -433,6 +433,11 @@
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\LED\led.c</FilePath>
             </File>
+            <File>
+              <FileName>sdio_sdcard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\SDIO\sdio_sdcard.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -487,6 +492,16 @@
               <FileName>stm32f4xx_pwr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FWLIB\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWLIB\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_sdio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWLIB\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -613,6 +628,11 @@
               <FileType>1</FileType>
               <FilePath>..\Testapp\Debug.c</FilePath>
             </File>
+            <File>
+              <FileName>SDCARD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Testapp\SDCARD.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -633,6 +653,16 @@
               <FileType>1</FileType>
               <FilePath>..\TIZA_LIB\src\tiza_debug.c</FilePath>
             </File>
+            <File>
+              <FileName>tiza_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TIZA_LIB\src\tiza_sd.c</FilePath>
+            </File>
+            <File>
+              <FileName>tiza_selfdef.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TIZA_LIB\src\tiza_selfdef.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -642,6 +672,36 @@
               <FileName>malloc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UCOSII\EXT\malloc.c</FilePath>
+            </File>
+            <File>
+              <FileName>osstdio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UCOSII\EXT\osstdio.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>FATFS</GroupName>
+          <Files>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FATFS\src\diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FATFS\src\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>exfuns.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FATFS\exfuns\exfuns.c</FilePath>
+            </File>
+            <File>
+              <FileName>ccsbcs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FATFS\src\option\ccsbcs.c</FilePath>
             </File>
           </Files>
         </Group>
